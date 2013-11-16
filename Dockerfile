@@ -2,24 +2,18 @@ FROM ubuntu:12.10
 MAINTAINER JP Simard "jp@jpsim.com"
 
 # Update packages
-# RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update && apt-get upgrade
 
 # Install some packages we need
-RUN apt-get install -y python-software-properties python g++ make software-properties-common
+RUN apt-get install -y curl
 
-# Add node repository to sources.list and update apt
-RUN add-apt-repository ppa:chris-lea/node.js && apt-get update
-
-# Install node.js
-RUN apt-get install -y nodejs
-
-# Update NPM and install forever
+# Install Node.JS
+RUN cd /usr/local && curl http://nodejs.org/dist/v0.10.22/node-v0.10.22-linux-x64.tar.gz | tar --strip-components=1 -zxf- && cd
 RUN npm -g update npm
 RUN npm install -g forever
 
 # Copy files and run
 ADD . /opt/apps/node-docker
-ADD .docker/run.sh /usr/local/bin/run
+RUN cd /opt/apps/node-docker && npm install
 EXPOSE 8000
-CMD ["/bin/sh", "-e", "/usr/local/bin/run"]
+CMD forever /opt/apps/node-docker/app.js
