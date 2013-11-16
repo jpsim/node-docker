@@ -1,15 +1,17 @@
 FROM ubuntu:12.10
 MAINTAINER JP Simard "jp@jpsim.com"
 
-# Update package repository
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe multiverse" > /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get upgrade -y
+# Update packages
+apt-get update && apt-get upgrade
 
-# Init node.js
-RUN add-apt-repository -y ppa:chris-lea/node.js
-RUN apt-get update
-RUN apt-get install -y nodejs
+# Install some packages we need
+apt-get install python-software-properties python g++ make software-properties-common
+
+# Add node repository to sources.list and update apt
+add-apt-repository ppa:chris-lea/node.js && apt-get update
+
+# Install node.js
+apt-get install nodejs
 
 # Update NPM and install forever
 RUN npm -g update npm
