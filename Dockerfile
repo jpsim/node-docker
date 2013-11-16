@@ -6,20 +6,10 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe multiverse"
 RUN apt-get update
 RUN apt-get upgrade -y
 
-# Required packages
-RUN apt-get install -y software-properties-common python python-software-properties g++ make
-
 # Init node.js
 RUN add-apt-repository -y ppa:chris-lea/node.js
 RUN apt-get update
 RUN apt-get install -y nodejs
-
-# Removed unnecessary packages
-RUN apt-get purge -y software-properties-common python python-software-properties g++ make
-RUN apt-get autoremove -y
-
-# Clear package repository cache
-RUN apt-get clean all
 
 # Update NPM and install forever
 RUN npm -g update npm
